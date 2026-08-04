@@ -34,12 +34,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 40px 20px;
+      padding: 30px 20px;
       pointer-events: none;
     }
     .header {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 15px;
       animation: fadeInDown 2s ease forwards;
     }
     h1 {
@@ -58,50 +58,43 @@
       letter-spacing: 2px;
       font-weight: 300;
     }
-    .controls {
+    .player-card {
       pointer-events: auto;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      max-width: 340px;
+      width: 100%;
     }
-    .play-btn {
-      background: linear-gradient(135deg, #e76f51, #f4a261);
-      border: none;
-      color: #fff;
-      padding: 16px 36px;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-family: 'Montserrat', sans-serif;
+    .song-title {
+      font-size: 0.9rem;
+      color: #f4a261;
       font-weight: 600;
-      letter-spacing: 1px;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(231, 111, 81, 0.4), 0 0 20px rgba(244, 162, 97, 0.2);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      letter-spacing: 0.5px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
     }
-    .play-btn:hover {
-      transform: scale(1.08) translateY(-3px);
-      box-shadow: 0 15px 40px rgba(231, 111, 81, 0.6), 0 0 30px rgba(244, 162, 97, 0.4);
+    .iframe-wrapper {
+      width: 100%;
+      height: 80px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .song-tag {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.75);
-      background: rgba(0, 0, 0, 0.4);
-      padding: 6px 16px;
-      border-radius: 20px;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    #youtube-player {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
@@ -119,74 +112,22 @@
       <p class="subtitle">Un jardín botánico floreciendo en la penumbra</p>
     </div>
 
-    <div class="controls">
-      <button class="play-btn" id="musicBtn" onclick="toggleAudio()">
-        <span id="btnIcon">▶</span> <span id="btnText">Reproducir Música</span>
-      </button>
-      <div class="song-tag">🎵 Cage the Elephant - Cigarette Daydreams</div>
+    <!-- Reproductor Elegante Integrado -->
+    <div class="player-card">
+      <div class="song-title">🎵 Cage the Elephant - Cigarette Daydreams</div>
+      <div class="iframe-wrapper">
+        <iframe 
+          src="https://www.youtube.com/embed/HXae3xI-X4w?enablejsapi=1&playsinline=1" 
+          title="Cage the Elephant - Cigarette Daydreams" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
     </div>
   </div>
 
-  <!-- Contenedor invisible para el reproductor de YouTube -->
-  <div id="youtube-player"></div>
-
   <script>
-    // Carga de la API de IFrame de YouTube
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    var player;
-    var isPlaying = false;
-    var isReady = false;
-
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
-        videoId: 'HXae3xI-X4w', // ID oficial de Cigarette Daydreams
-        playerVars: {
-          'playsinline': 1,
-          'controls': 0,
-          'disablekb': 1,
-          'loop': 1,
-          'playlist': 'HXae3xI-X4w'
-        },
-        events: {
-          'onReady': onPlayerReady
-        }
-      });
-    }
-
-    function onPlayerReady(event) {
-      isReady = true;
-    }
-
-    function toggleAudio() {
-      var btnText = document.getElementById('btnText');
-      var btnIcon = document.getElementById('btnIcon');
-
-      if (!isReady) {
-        btnText.innerText = "Cargando audio...";
-        setTimeout(toggleAudio, 500);
-        return;
-      }
-
-      if (!isPlaying) {
-        player.playVideo();
-        isPlaying = true;
-        btnText.innerText = "Pausar Música";
-        btnIcon.innerText = "❚❚";
-      } else {
-        player.pauseVideo();
-        isPlaying = false;
-        btnText.innerText = "Reproducir Música";
-        btnIcon.innerText = "▶";
-      }
-    }
-
-    // Renderizado del Canvas Botánico
+    // Canvas Botánico Animado
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
