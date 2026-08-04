@@ -96,6 +96,107 @@
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
+
+    /* Hongo Interactivo Especial */
+    .special-shroom-btn {
+      pointer-events: auto;
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(244, 162, 97, 0.3);
+      padding: 14px 24px;
+      border-radius: 30px;
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #f4a261;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 0 25px rgba(244, 162, 97, 0.2);
+      transition: all 0.3s ease;
+      animation: pulseGlow 3s infinite ease-in-out;
+    }
+    .special-shroom-btn:hover {
+      transform: translate(-50%, -50%) scale(1.08);
+      background: rgba(244, 162, 97, 0.15);
+      box-shadow: 0 0 35px rgba(244, 162, 97, 0.5);
+    }
+
+    /* Popup Modal del Mensaje */
+    .message-modal {
+      pointer-events: auto;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+    .message-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .message-card {
+      background: linear-gradient(135deg, rgba(20, 29, 47, 0.95), rgba(11, 15, 25, 0.95));
+      border: 1px solid rgba(244, 162, 97, 0.4);
+      padding: 40px 30px;
+      border-radius: 24px;
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(244, 162, 97, 0.2);
+      transform: scale(0.8);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .message-modal.active .message-card {
+      transform: scale(1);
+    }
+    .message-card .icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .message-card h2 {
+      font-family: 'Cinzel', serif;
+      color: #f4a261;
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+    .message-card p {
+      color: #e2e8f0;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    .close-btn {
+      background: linear-gradient(135deg, #e76f51, #f4a261);
+      border: none;
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(244, 162, 97, 0.2); }
+      50% { box-shadow: 0 0 30px rgba(244, 162, 97, 0.6); }
+    }
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -112,6 +213,11 @@
       <p class="subtitle">Un jardín botánico floreciendo en la penumbra</p>
     </div>
 
+    <!-- Hongo Interactivo Especial -->
+    <button class="special-shroom-btn" onclick="openMessage()">
+      <span>🍄</span> Tócame...
+    </button>
+
     <div class="controls">
       <button class="play-btn" id="musicBtn" onclick="toggleAudio()">
         <span id="btnIcon">▶</span> <span id="btnText">Reproducir Música</span>
@@ -120,11 +226,28 @@
     </div>
   </div>
 
+  <!-- Modal con el Mensaje -->
+  <div class="message-modal" id="modal">
+    <div class="message-card">
+      <span class="icon">🍄✨</span>
+      <h2>Te amo</h2>
+      <p>Y lo siento mucho ❤️</p>
+      <button class="close-btn" onclick="closeMessage()">Cerrar</button>
+    </div>
+  </div>
+
   <audio id="audioTrack" loop preload="auto">
     <source src="cancion.mp3" type="audio/mpeg">
   </audio>
 
   <script>
+    function openMessage() {
+      document.getElementById('modal').classList.add('active');
+    }
+    function closeMessage() {
+      document.getElementById('modal').classList.remove('active');
+    }
+
     const audio = document.getElementById('audioTrack');
     const btnText = document.getElementById('btnText');
     const btnIcon = document.getElementById('btnIcon');
