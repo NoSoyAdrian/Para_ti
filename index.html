@@ -116,32 +116,93 @@
       <button class="play-btn" id="musicBtn" onclick="toggleAudio()">
         <span id="btnIcon">▶</span> <span id="btnText">Reproducir Música</span>
       </button>
-      <div class="song-tag">🎵 Cigarette Daydreams - Acoustic</div>
+      <div class="song-tag">🎵 Cigarette Daydreams - Acoustic Melodic Synth</div>
     </div>
   </div>
 
-  <audio id="audioTrack" loop preload="auto">
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a735e0.mp3?filename=acoustic-guitar-loop-21142.mp3" type="audio/mpeg">
-  </audio>
-
   <script>
-    const audio = document.getElementById('audioTrack');
-    const btnText = document.getElementById('btnText');
-    const btnIcon = document.getElementById('btnIcon');
+    // Sintetizador Nativo Web Audio API (Cero dependencias externas / No falla nunca)
+    let audioCtx = null;
+    let isPlaying = false;
+    let timerId = null;
+
+    // Frecuencias para la progresión de Cigarette Daydreams (D - Bm - G - A)
+    const chords = [
+      [293.66, 369.99, 440.00, 587.33], // D Major
+      [246.94, 293.66, 369.99, 493.88], // Bm
+      [196.00, 246.94, 293.66, 392.00], // G Major
+      [220.00, 277.18, 329.63, 440.00]  // A Major
+    ];
+
+    let currentChord = 0;
+    let noteStep = 0;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playPluckNote(freq, delay) {
+      if (!audioCtx || !isPlaying) return;
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+
+      // Envolvente de sonido tipo arpa/guitarra acústica
+      gain.gain.setValueAtTime(0, audioCtx.currentTime + delay);
+      gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + delay + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + delay + 1.2);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(audioCtx.currentTime + delay);
+      osc.stop(audioCtx.currentTime + delay + 1.3);
+    }
+
+    function stepArpeggio() {
+      if (!isPlaying) return;
+
+      const chord = chords[currentChord];
+      const noteFreq = chord[noteStep % chord.length];
+
+      playPluckNote(noteFreq, 0);
+
+      noteStep++;
+      if (noteStep % 8 === 0) {
+        currentChord = (currentChord + 1) % chords.length;
+      }
+
+      timerId = setTimeout(stepArpeggio, 220); // Tempo arpegio suave
+    }
 
     function toggleAudio() {
-      if (audio.paused) {
-        audio.play().then(() => {
-          btnText.innerText = "Pausar Música";
-          btnIcon.innerText = "❚❚";
-        }).catch(err => console.log("Audio play error:", err));
+      initAudio();
+      const btnText = document.getElementById('btnText');
+      const btnIcon = document.getElementById('btnIcon');
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      if (!isPlaying) {
+        isPlaying = true;
+        btnText.innerText = "Pausar Música";
+        btnIcon.innerText = "❚❚";
+        stepArpeggio();
       } else {
-        audio.pause();
+        isPlaying = false;
+        clearTimeout(timerId);
         btnText.innerText = "Reproducir Música";
         btnIcon.innerText = "▶";
       }
     }
 
+    // Canvas Botánico Interactivo
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
