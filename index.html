@@ -1,491 +1,898 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para Ti ✨</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background: #0b0f19;
-      color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-    canvas#canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-    }
-    .container {
-      position: relative;
-      z-index: 2;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 40px 20px;
-      pointer-events: none;
-    }
-    .header {
-      text-align: center;
-      margin-top: 20px;
-      animation: fadeInDown 2s ease forwards;
-    }
-    h1 {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(2.2rem, 5vw, 3.8rem);
-      letter-spacing: 4px;
-      background: linear-gradient(135deg, #fff 30%, #f4a261 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      margin-bottom: 8px;
-    }
-    p.subtitle {
-      font-size: clamp(0.9rem, 2vw, 1.2rem);
-      color: #a0aec0;
-      letter-spacing: 2px;
-      font-weight: 300;
-    }
-    .controls {
-      pointer-events: auto;
-      margin-bottom: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-    .play-btn {
-      background: linear-gradient(135deg, #e76f51, #f4a261);
-      border: none;
-      color: #fff;
-      padding: 16px 36px;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
-      letter-spacing: 1px;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(231, 111, 81, 0.4), 0 0 20px rgba(244, 162, 97, 0.2);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .play-btn:hover {
-      transform: scale(1.08) translateY(-3px);
-      box-shadow: 0 15px 40px rgba(231, 111, 81, 0.6), 0 0 30px rgba(244, 162, 97, 0.4);
-    }
-    .song-tag {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.75);
-      background: rgba(0, 0, 0, 0.4);
-      padding: 6px 16px;
-      border-radius: 20px;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Flores Amarillas 💛</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    font-family:"Courier New", monospace;
+    background:#72c9ff;
+    image-rendering:pixelated;
+}
+
+/* ============================= */
+/* ESCENA                         */
+/* ============================= */
+
+.scene{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            #6ec6ff 0%,
+            #9be1ff 65%,
+            #d8f4ff 100%
+        );
+}
+
+
+/* ============================= */
+/* SOL                            */
+/* ============================= */
+
+.sun{
+    position:absolute;
+    width:80px;
+    height:80px;
+
+    background:#ffe45e;
+
+    top:70px;
+    right:12%;
+
+    box-shadow:
+        8px 0 #ffd43b,
+        -8px 0 #ffd43b,
+        0 8px #ffd43b,
+        0 -8px #ffd43b;
+
+    animation: sunFloat 4s ease-in-out infinite;
+}
+
+@keyframes sunFloat{
+
+    0%,100%{
+        transform:translateY(0);
     }
 
-    /* Hongo Interactivo Especial */
-    .special-shroom-btn {
-      pointer-events: auto;
-      position: absolute;
-      top: 48%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(244, 162, 97, 0.3);
-      padding: 14px 24px;
-      border-radius: 30px;
-      backdrop-filter: blur(12px);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #f4a261;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      box-shadow: 0 0 25px rgba(244, 162, 97, 0.2);
-      transition: all 0.3s ease;
-      animation: pulseGlow 3s infinite ease-in-out;
-    }
-    .special-shroom-btn:hover {
-      transform: translate(-50%, -50%) scale(1.08);
-      background: rgba(244, 162, 97, 0.15);
-      box-shadow: 0 0 35px rgba(244, 162, 97, 0.5);
+    50%{
+        transform:translateY(-10px);
     }
 
-    /* Popup Modal del Mensaje */
-    .message-modal {
-      pointer-events: auto;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s ease;
-    }
-    .message-modal.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    .message-card {
-      background: linear-gradient(135deg, rgba(20, 29, 47, 0.95), rgba(11, 15, 25, 0.95));
-      border: 1px solid rgba(244, 162, 97, 0.4);
-      padding: 40px 30px;
-      border-radius: 24px;
-      text-align: center;
-      max-width: 90%;
-      width: 400px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(244, 162, 97, 0.2);
-      transform: scale(0.8);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .message-modal.active .message-card {
-      transform: scale(1);
-    }
-    .message-card .icon {
-      font-size: 3rem;
-      margin-bottom: 12px;
-      display: block;
-    }
-    .message-card h2 {
-      font-family: 'Cinzel', serif;
-      color: #f4a261;
-      font-size: 1.8rem;
-      margin-bottom: 12px;
-    }
-    .message-card p {
-      color: #e2e8f0;
-      font-size: 1.1rem;
-      line-height: 1.6;
-      font-weight: 300;
-      margin-bottom: 24px;
-    }
-    .close-btn {
-      background: linear-gradient(135deg, #e76f51, #f4a261);
-      border: none;
-      color: #fff;
-      padding: 10px 28px;
-      border-radius: 50px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: 'Montserrat', sans-serif;
+}
+
+
+/* ============================= */
+/* NUBES PIXEL                    */
+/* ============================= */
+
+.cloud{
+
+    position:absolute;
+
+    width:100px;
+    height:30px;
+
+    background:white;
+
+    box-shadow:
+        20px -20px white,
+        40px -20px white,
+        60px 0 white;
+
+    opacity:.9;
+
+}
+
+.cloud1{
+    top:120px;
+    left:-150px;
+
+    animation:moveCloud 25s linear infinite;
+}
+
+.cloud2{
+    top:220px;
+    left:-300px;
+
+    transform:scale(.7);
+
+    animation:moveCloud 35s linear infinite;
+}
+
+@keyframes moveCloud{
+
+    from{
+        transform:translateX(-150px);
     }
 
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 15px rgba(244, 162, 97, 0.2); }
-      50% { box-shadow: 0 0 30px rgba(244, 162, 97, 0.6); }
+    to{
+        transform:translateX(calc(100vw + 300px));
     }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
+
+}
+
+
+/* ============================= */
+/* TITULO                         */
+/* ============================= */
+
+.title{
+
+    position:absolute;
+
+    top:12%;
+
+    width:100%;
+
+    text-align:center;
+
+    color:white;
+
+    text-shadow:
+        4px 4px #6b5b95;
+
+    font-weight:bold;
+
+    font-size:clamp(26px,6vw,55px);
+
+    animation:titleFloat 2s ease-in-out infinite;
+}
+
+@keyframes titleFloat{
+
+    0%,100%{
+        transform:translateY(0);
     }
-  </style>
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+}
+
+
+/* ============================= */
+/* FLORES                         */
+/* ============================= */
+
+.flowers{
+
+    position:absolute;
+
+    bottom:100px;
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-evenly;
+
+    align-items:flex-end;
+
+}
+
+
+/* cada flor */
+
+.flower{
+
+    position:relative;
+
+    width:70px;
+    height:200px;
+
+    transform-origin:bottom center;
+
+    animation:sway 2.5s ease-in-out infinite;
+
+}
+
+.flower:nth-child(2){
+    animation-delay:.3s;
+}
+
+.flower:nth-child(3){
+    animation-delay:.8s;
+}
+
+.flower:nth-child(4){
+    animation-delay:.4s;
+}
+
+.flower:nth-child(5){
+    animation-delay:1s;
+}
+
+
+@keyframes sway{
+
+    0%,100%{
+        transform:rotate(-3deg);
+    }
+
+    50%{
+        transform:rotate(3deg);
+    }
+
+}
+
+
+/* ============================= */
+/* CABEZA FLOR PIXEL              */
+/* ============================= */
+
+.flower-head{
+
+    position:absolute;
+
+    top:0;
+    left:18px;
+
+    width:36px;
+    height:36px;
+
+    background:#ffdf00;
+
+    box-shadow:
+
+        -18px 0 #ffdf00,
+        18px 0 #ffdf00,
+
+        0 -18px #ffe94a,
+        0 18px #ffd000,
+
+        -13px -13px #ffe94a,
+        13px -13px #ffe94a,
+
+        -13px 13px #ffd000,
+        13px 13px #ffd000;
+
+}
+
+
+/* centro */
+
+.flower-head::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:18px;
+    height:18px;
+
+    background:#8b5a2b;
+
+    top:9px;
+    left:9px;
+
+    box-shadow:
+        4px 4px #6b421f;
+
+}
+
+
+/* ============================= */
+/* TALLO                          */
+/* ============================= */
+
+.stem{
+
+    position:absolute;
+
+    width:12px;
+    height:140px;
+
+    background:#35a853;
+
+    left:30px;
+    top:45px;
+
+    box-shadow:
+        6px 0 #21883c;
+
+}
+
+
+/* hojas */
+
+.leaf{
+
+    position:absolute;
+
+    width:28px;
+    height:14px;
+
+    background:#43b95f;
+
+}
+
+.leaf.left{
+
+    left:7px;
+    top:110px;
+
+    transform:rotate(30deg);
+
+}
+
+.leaf.right{
+
+    right:7px;
+    top:140px;
+
+    transform:rotate(-30deg);
+
+}
+
+
+/* ============================= */
+/* PISO                           */
+/* ============================= */
+
+.ground{
+
+    position:absolute;
+
+    bottom:0;
+
+    width:100%;
+    height:110px;
+
+    background:#6ac259;
+
+    border-top:15px solid #48a447;
+
+}
+
+.ground::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:15px;
+
+    width:100%;
+    height:95px;
+
+    background:
+
+        repeating-linear-gradient(
+            45deg,
+            #9b6538,
+            #9b6538 20px,
+            #85532f 20px,
+            #85532f 40px
+        );
+
+}
+
+
+/* ============================= */
+/* BOTÓN                          */
+/* ============================= */
+
+.game-button{
+
+    position:absolute;
+
+    left:50%;
+    bottom:35px;
+
+    transform:translateX(-50%);
+
+    z-index:20;
+
+    font-family:"Courier New", monospace;
+
+    font-size:16px;
+    font-weight:bold;
+
+    background:#ffd83d;
+
+    border:none;
+
+    padding:16px 25px;
+
+    cursor:pointer;
+
+    color:#5a4100;
+
+    box-shadow:
+
+        0 6px #b47d00,
+        6px 6px #704b00;
+
+    transition:.15s;
+
+}
+
+.game-button:hover{
+
+    transform:
+        translateX(-50%)
+        translateY(-3px);
+
+}
+
+.game-button:active{
+
+    transform:
+        translateX(-50%)
+        translateY(6px);
+
+    box-shadow:
+        0 0 #b47d00;
+
+}
+
+
+/* ============================= */
+/* CARTA                          */
+/* ============================= */
+
+.letter-container{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    z-index:100;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.5s;
+
+}
+
+.letter-container.show{
+
+    opacity:1;
+
+    pointer-events:auto;
+
+}
+
+
+.letter{
+
+    width:min(88%,500px);
+
+    background:#fff8dc;
+
+    padding:35px;
+
+    position:relative;
+
+    border:8px solid #ffd83d;
+
+    box-shadow:
+        12px 12px #684c31;
+
+    transform:scale(.4) translateY(200px);
+
+    transition:
+        transform .6s cubic-bezier(.17,.89,.32,1.4);
+
+}
+
+
+.letter-container.show .letter{
+
+    transform:
+        scale(1)
+        translateY(0);
+
+}
+
+
+.letter h2{
+
+    text-align:center;
+
+    color:#d39b00;
+
+    margin-bottom:20px;
+
+}
+
+
+.letter p{
+
+    color:#4c4032;
+
+    font-family:Arial,sans-serif;
+
+    line-height:1.7;
+
+    text-align:center;
+
+    font-size:17px;
+
+}
+
+
+/* cerrar */
+
+.close{
+
+    position:absolute;
+
+    right:10px;
+    top:7px;
+
+    background:none;
+    border:none;
+
+    font-size:25px;
+
+    cursor:pointer;
+
+}
+
+
+/* ============================= */
+/* CORAZONES / PARTÍCULAS         */
+/* ============================= */
+
+.particle{
+
+    position:absolute;
+
+    font-size:25px;
+
+    pointer-events:none;
+
+    animation:particleAnimation 2s forwards;
+
+}
+
+@keyframes particleAnimation{
+
+    0%{
+
+        transform:
+            translateY(0)
+            scale(.4);
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        transform:
+            translateY(-250px)
+            rotate(30deg)
+            scale(1.5);
+
+        opacity:0;
+
+    }
+
+}
+
+
+/* ============================= */
+/* RESPONSIVE                     */
+/* ============================= */
+
+@media(max-width:600px){
+
+    .flowers{
+
+        transform:scale(.75);
+
+        transform-origin:bottom center;
+
+        width:130%;
+        left:-15%;
+
+    }
+
+    .flower:nth-child(1),
+    .flower:nth-child(5){
+
+        display:none;
+
+    }
+
+}
+
+</style>
+
 </head>
+
+
 <body>
 
-  <canvas id="canvas"></canvas>
 
-  <div class="container">
-    <div class="header">
-      <h1>Para Ti ✨</h1>
-      <p class="subtitle">Un jardín botánico floreciendo en la penumbra</p>
+<div class="scene">
+
+    <div class="sun"></div>
+
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+
+
+    <div class="title">
+
+        🌼 Para ti 🌼
+
     </div>
 
-    <!-- Hongo Interactivo Especial -->
-    <button class="special-shroom-btn" onclick="openMessage()">
-      <span>🍄</span> Tócame...
+
+
+    <div class="flowers">
+
+
+        <div class="flower">
+
+            <div class="flower-head"></div>
+
+            <div class="stem"></div>
+
+            <div class="leaf left"></div>
+
+            <div class="leaf right"></div>
+
+        </div>
+
+
+
+        <div class="flower">
+
+            <div class="flower-head"></div>
+
+            <div class="stem"></div>
+
+            <div class="leaf left"></div>
+
+            <div class="leaf right"></div>
+
+        </div>
+
+
+
+        <div class="flower">
+
+            <div class="flower-head"></div>
+
+            <div class="stem"></div>
+
+            <div class="leaf left"></div>
+
+            <div class="leaf right"></div>
+
+        </div>
+
+
+
+        <div class="flower">
+
+            <div class="flower-head"></div>
+
+            <div class="stem"></div>
+
+            <div class="leaf left"></div>
+
+            <div class="leaf right"></div>
+
+        </div>
+
+
+
+        <div class="flower">
+
+            <div class="flower-head"></div>
+
+            <div class="stem"></div>
+
+            <div class="leaf left"></div>
+
+            <div class="leaf right"></div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <button
+        class="game-button"
+        onclick="openLetter()"
+    >
+
+        Presiona aquí 💛
+
     </button>
 
-    <div class="controls">
-      <button class="play-btn" id="musicBtn" onclick="toggleAudio()">
-        <span id="btnIcon">▶</span> <span id="btnText">Reproducir Música</span>
-      </button>
-      <div class="song-tag">🎵 Cage the Elephant - Cigarette Daydreams</div>
+
+    <div class="ground"></div>
+
+</div>
+
+
+
+<!-- CARTA -->
+
+<div
+    class="letter-container"
+    id="letterContainer"
+>
+
+    <div class="letter">
+
+
+        <button
+            class="close"
+            onclick="closeLetter()"
+        >
+
+            ×
+
+        </button>
+
+
+        <h2>
+            Para ti 🌻
+        </h2>
+
+
+        <p>
+
+            Quería darte algo diferente.
+
+            <br><br>
+
+            Tal vez no pueda entregarte todas las flores
+            amarillas del mundo, pero sí quería hacer algo
+            que fuera especialmente para ti.
+
+            <br><br>
+
+            Gracias por compartir conmigo tantos momentos,
+            por las risas, las tonterías, las conversaciones
+            y hasta esos pequeños detalles que terminan
+            significando muchísimo.
+
+            <br><br>
+
+            Espero que cuando veas estas flores recuerdes
+            que alguien estuvo pensando en ti mientras
+            hacía todo esto.
+
+            <br><br>
+
+            💛🌻
+
+        </p>
+
+
     </div>
-  </div>
 
-  <!-- Modal con el Mensaje -->
-  <div class="message-modal" id="modal">
-    <div class="message-card">
-      <span class="icon">🍄✨</span>
-      <h2>Te amo</h2>
-      <p>Y lo siento mucho ❤️</p>
-      <button class="close-btn" onclick="closeMessage()">Cerrar</button>
-    </div>
-  </div>
+</div>
 
-  <audio id="audioTrack" loop preload="auto">
-    <source src="cancion.mp3" type="audio/mpeg">
-  </audio>
 
-  <script>
-    function openMessage() {
-      document.getElementById('modal').classList.add('active');
-    }
-    function closeMessage() {
-      document.getElementById('modal').classList.remove('active');
-    }
 
-    const audio = document.getElementById('audioTrack');
-    const btnText = document.getElementById('btnText');
-    const btnIcon = document.getElementById('btnIcon');
+<script>
 
-    function toggleAudio() {
-      if (audio.paused) {
-        audio.play().then(() => {
-          btnText.innerText = "Pausar Música";
-          btnIcon.innerText = "❚❚";
-        }).catch(err => {
-          console.log("Error al reproducir audio:", err);
-        });
-      } else {
-        audio.pause();
-        btnText.innerText = "Reproducir Música";
-        btnIcon.innerText = "▶";
-      }
-    }
 
-    // Canvas Botánico Animado
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+function openLetter(){
 
-    let width, height;
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      initGarden();
-    }
-    window.addEventListener('resize', resize);
+    const container =
+        document.getElementById("letterContainer");
 
-    const particles = Array.from({ length: 70 }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: Math.random() * 3 + 1,
-      dx: (Math.random() - 0.5) * 0.6,
-      dy: -Math.random() * 0.8 - 0.2,
-      alpha: Math.random() * 0.8 + 0.2,
-      pulse: Math.random() * 0.05
-    }));
+    container.classList.add("show");
 
-    class Plant {
-      constructor(x, targetHeight, type, color, delay) {
-        this.x = x;
-        this.targetHeight = targetHeight;
-        this.currentHeight = 0;
-        this.type = type; 
-        this.color = color;
-        this.delay = delay;
-        this.progress = 0;
-        this.swayAngle = Math.random() * Math.PI * 2;
-        this.swaySpeed = 0.015 + Math.random() * 0.01;
-      }
+    createParticles();
 
-      update() {
-        if (this.delay > 0) {
-          this.delay--;
-          return;
-        }
-        if (this.progress < 1) {
-          this.progress += 0.008;
-          this.currentHeight = this.targetHeight * this.cubicEaseOut(this.progress);
-        }
-        this.swayAngle += this.swaySpeed;
-      }
+}
 
-      cubicEaseOut(t) { return --t * t * t + 1; }
 
-      draw() {
-        if (this.progress <= 0) return;
 
-        ctx.save();
-        const sway = Math.sin(this.swayAngle) * (15 * this.progress);
-        const baseX = this.x;
-        const baseY = height;
-        const tipX = baseX + sway;
-        const tipY = height - this.currentHeight;
+function closeLetter(){
 
-        ctx.beginPath();
-        ctx.moveTo(baseX, baseY);
-        const controlX = baseX + sway * 0.5;
-        const controlY = baseY - this.currentHeight * 0.5;
-        ctx.quadraticCurveTo(controlX, controlY, tipX, tipY);
-        ctx.strokeStyle = '#2d5a27';
-        ctx.lineWidth = this.type === 'fern' ? 6 : 4;
-        ctx.lineCap = 'round';
-        ctx.stroke();
+    const container =
+        document.getElementById("letterContainer");
 
-        if (this.type === 'poppy') this.drawPoppy(tipX, tipY, this.progress);
-        else if (this.type === 'mushroom') this.drawMushroom(tipX, tipY, this.progress);
-        else if (this.type === 'fern') this.drawFernLeaves(baseX, baseY, tipX, tipY, this.progress);
-        else if (this.type === 'blueflower') this.drawWildFlower(tipX, tipY, this.progress);
+    container.classList.remove("show");
 
-        ctx.restore();
-      }
+}
 
-      drawPoppy(x, y, scale) {
-        const r = 38 * scale;
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = 'rgba(230, 57, 70, 0.4)';
 
-        const petals = 6;
-        for (let i = 0; i < petals; i++) {
-          const angle = (i * Math.PI * 2) / petals;
-          ctx.beginPath();
-          ctx.arc(Math.cos(angle) * 16 * scale, Math.sin(angle) * 16 * scale, r * 0.8, 0, Math.PI * 2);
-          ctx.fillStyle = i % 2 === 0 ? '#e63946' : '#d62828';
-          ctx.fill();
-        }
 
-        ctx.beginPath();
-        ctx.arc(0, 0, 14 * scale, 0, Math.PI * 2);
-        ctx.fillStyle = '#1d3557';
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(0, 0, 8 * scale, 0, Math.PI * 2);
-        ctx.fillStyle = '#f4a261';
-        ctx.fill();
-        ctx.restore();
-      }
+function createParticles(){
 
-      drawMushroom(x, y, scale) {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.beginPath();
-        ctx.ellipse(0, 15 * scale, 10 * scale, 20 * scale, 0, 0, Math.PI * 2);
-        ctx.fillStyle = '#f4a261';
-        ctx.fill();
+    const symbols =
+        ["💛","🌼","✨","🌻"];
 
-        ctx.beginPath();
-        ctx.arc(0, 0, 30 * scale, Math.PI, 0);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = this.color;
-        ctx.fill();
 
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(-10 * scale, -12 * scale, 4 * scale, 0, Math.PI * 2);
-        ctx.arc(10 * scale, -15 * scale, 5 * scale, 0, Math.PI * 2);
-        ctx.arc(0 * scale, -20 * scale, 3 * scale, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
+    for(let i = 0; i < 30; i++){
 
-      drawFernLeaves(bx, by, tx, ty, scale) {
-        const count = 10;
-        for (let i = 1; i <= count; i++) {
-          const t = i / count;
-          if (t > scale) continue;
-          const lx = bx + (tx - bx) * t;
-          const ly = by + (ty - by) * t;
-          const leafLen = (1 - t * 0.6) * 35 * scale;
+        const particle =
+            document.createElement("div");
 
-          ctx.beginPath();
-          ctx.moveTo(lx, ly);
-          ctx.lineTo(lx - leafLen, ly - 10);
-          ctx.moveTo(lx, ly);
-          ctx.lineTo(lx + leafLen, ly - 10);
-          ctx.strokeStyle = '#2a9d8f';
-          ctx.lineWidth = 3;
-          ctx.stroke();
-        }
-      }
+        particle.className =
+            "particle";
 
-      drawWildFlower(x, y, scale) {
-        ctx.save();
-        ctx.translate(x, y);
-        for (let i = 0; i < 5; i++) {
-          const angle = (i * Math.PI * 2) / 5;
-          ctx.beginPath();
-          ctx.arc(Math.cos(angle) * 12 * scale, Math.sin(angle) * 12 * scale, 9 * scale, 0, Math.PI * 2);
-          ctx.fillStyle = '#4ea8de';
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = '#4ea8de';
-          ctx.fill();
-        }
-        ctx.beginPath();
-        ctx.arc(0, 0, 6 * scale, 0, Math.PI * 2);
-        ctx.fillStyle = '#fff';
-        ctx.fill();
-        ctx.restore();
-      }
+
+        particle.innerHTML =
+            symbols[
+                Math.floor(
+                    Math.random()
+                    *
+                    symbols.length
+                )
+            ];
+
+
+        particle.style.left =
+            Math.random()
+            *
+            window.innerWidth
+            + "px";
+
+
+        particle.style.top =
+            (
+                window.innerHeight
+                -
+                Math.random()*150
+            )
+            + "px";
+
+
+        particle.style.animationDelay =
+            Math.random()
+            *
+            .5
+            + "s";
+
+
+        document.body.appendChild(
+            particle
+        );
+
+
+        setTimeout(
+            ()=>particle.remove(),
+            2600
+        );
+
     }
 
-    let plants = [];
-    function initGarden() {
-      plants = [];
-      const totalPlants = Math.floor(window.innerWidth / 45);
-      for (let i = 0; i < totalPlants; i++) {
-        const x = (window.innerWidth / totalPlants) * i + Math.random() * 25;
-        const targetH = window.innerHeight * (0.35 + Math.random() * 0.45);
-        const types = ['poppy', 'mushroom', 'fern', 'blueflower'];
-        const type = types[Math.floor(Math.random() * types.length)];
-        const colors = ['#e76f51', '#2a9d8f', '#e9c46a', '#a76d60'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const delay = Math.floor(Math.random() * 50);
+}
 
-        plants.push(new Plant(x, targetH, type, color, delay));
-      }
-    }
 
-    resize();
+</script>
 
-    function animate() {
-      const grad = ctx.createLinearGradient(0, 0, 0, height);
-      grad.addColorStop(0, '#0b0f19');
-      grad.addColorStop(0.6, '#111827');
-      grad.addColorStop(1, '#1a2332');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, width, height);
 
-      particles.forEach(p => {
-        p.x += p.dx;
-        p.y += p.dy;
-        p.alpha += Math.sin(p.pulse) * 0.01;
-        if (p.y < 0) {
-          p.y = height;
-          p.x = Math.random() * width;
-        }
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(244, 208, 111, ${Math.max(0.1, p.alpha)})`;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = "#f4d06f";
-        ctx.fill();
-      });
-
-      plants.forEach(plant => {
-        plant.update();
-        plant.draw();
-      });
-
-      requestAnimationFrame(animate);
-    }
-    animate();
-  </script>
 </body>
 </html>
