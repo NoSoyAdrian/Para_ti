@@ -1,630 +1,948 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Flores Amarillas 💛</title>
+    <title>Alien Love Transmission 👽</title>
 
-<style>
+    <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
 
-body{
-    overflow:hidden;
-    font-family:"Courier New", monospace;
-    background:#72c9ff;
-    image-rendering:pixelated;
-}
+        html,
+        body{
+            width:100%;
+            height:100%;
+            overflow:hidden;
+        }
 
-/* ============================= */
-/* ESCENA                         */
-/* ============================= */
+        body{
+            font-family:"Courier New", monospace;
+            background:#050510;
+            color:white;
+        }
 
-.scene{
-    width:100vw;
-    height:100vh;
-    position:relative;
-    overflow:hidden;
+        /* ===========================
+           ESCENAS
+        =========================== */
 
-    background:
-        linear-gradient(
-            #6ec6ff 0%,
-            #9be1ff 65%,
-            #d8f4ff 100%
-        );
-}
+        .scene{
+            position:absolute;
+            inset:0;
 
+            display:flex;
+            align-items:center;
+            justify-content:center;
 
-/* ============================= */
-/* SOL                            */
-/* ============================= */
+            opacity:0;
+            pointer-events:none;
 
-.sun{
-    position:absolute;
-    width:80px;
-    height:80px;
+            transition:opacity 1s ease;
+        }
 
-    background:#ffe45e;
+        .scene.active{
+            opacity:1;
+            pointer-events:auto;
+        }
 
-    top:70px;
-    right:12%;
 
-    box-shadow:
-        8px 0 #ffd43b,
-        -8px 0 #ffd43b,
-        0 8px #ffd43b,
-        0 -8px #ffd43b;
+        /* ===========================
+           CIELO
+        =========================== */
 
-    animation: sunFloat 4s ease-in-out infinite;
-}
+        #earthScene{
 
-@keyframes sunFloat{
+            background:
 
-    0%,100%{
-        transform:translateY(0);
-    }
+            radial-gradient(
+                circle at 50% 120%,
+                #432776 0%,
+                #171436 38%,
+                #080817 75%
+            );
 
-    50%{
-        transform:translateY(-10px);
-    }
+        }
 
-}
 
+        /* ===========================
+           ESTRELLAS
+        =========================== */
 
-/* ============================= */
-/* NUBES PIXEL                    */
-/* ============================= */
+        .stars{
+            position:absolute;
+            inset:0;
+            overflow:hidden;
+        }
 
-.cloud{
+        .star{
+            position:absolute;
 
-    position:absolute;
+            width:3px;
+            height:3px;
 
-    width:100px;
-    height:30px;
+            background:white;
 
-    background:white;
+            box-shadow:
+                0 0 5px white;
 
-    box-shadow:
-        20px -20px white,
-        40px -20px white,
-        60px 0 white;
+            animation:twinkle 2s infinite alternate;
+        }
 
-    opacity:.9;
+        @keyframes twinkle{
 
-}
+            from{
+                opacity:.2;
+                transform:scale(.7);
+            }
 
-.cloud1{
-    top:120px;
-    left:-150px;
+            to{
+                opacity:1;
+                transform:scale(1.5);
+            }
 
-    animation:moveCloud 25s linear infinite;
-}
+        }
 
-.cloud2{
-    top:220px;
-    left:-300px;
 
-    transform:scale(.7);
+        /* ===========================
+           LUNA
+        =========================== */
 
-    animation:moveCloud 35s linear infinite;
-}
+        .moon{
 
-@keyframes moveCloud{
+            position:absolute;
 
-    from{
-        transform:translateX(-150px);
-    }
+            width:100px;
+            height:100px;
 
-    to{
-        transform:translateX(calc(100vw + 300px));
-    }
+            right:10%;
+            top:10%;
 
-}
+            border-radius:50%;
 
+            background:#fff4c4;
 
-/* ============================= */
-/* TITULO                         */
-/* ============================= */
+            box-shadow:
+                0 0 30px #fff4c4,
+                0 0 70px rgba(255,244,196,.25);
 
-.title{
+        }
 
-    position:absolute;
 
-    top:12%;
+        .moon::before{
 
-    width:100%;
+            content:"";
 
-    text-align:center;
+            position:absolute;
 
-    color:white;
+            width:18px;
+            height:18px;
 
-    text-shadow:
-        4px 4px #6b5b95;
+            background:#ddd3aa;
 
-    font-weight:bold;
+            border-radius:50%;
 
-    font-size:clamp(26px,6vw,55px);
+            left:25px;
+            top:20px;
 
-    animation:titleFloat 2s ease-in-out infinite;
-}
+            box-shadow:
+                35px 18px #ddd3aa,
+                10px 45px #ddd3aa;
 
-@keyframes titleFloat{
+        }
 
-    0%,100%{
-        transform:translateY(0);
-    }
 
-    50%{
-        transform:translateY(-8px);
-    }
+        /* ===========================
+           SUELO
+        =========================== */
 
-}
+        .ground{
 
+            position:absolute;
 
-/* ============================= */
-/* FLORES                         */
-/* ============================= */
+            bottom:0;
 
-.flowers{
+            width:100%;
+            height:130px;
 
-    position:absolute;
+            background:#0b1723;
 
-    bottom:100px;
+            clip-path:polygon(
+                0 40%,
+                10% 20%,
+                22% 38%,
+                35% 10%,
+                50% 45%,
+                65% 18%,
+                80% 35%,
+                100% 12%,
+                100% 100%,
+                0 100%
+            );
 
-    width:100%;
+        }
 
-    display:flex;
 
-    justify-content:space-evenly;
+        /* ===========================
+           PANEL TRANSMISIÓN
+        =========================== */
 
-    align-items:flex-end;
+        .transmission{
 
-}
+            position:relative;
 
+            z-index:10;
 
-/* cada flor */
+            width:min(90%,650px);
 
-.flower{
+            padding:35px;
 
-    position:relative;
+            text-align:center;
 
-    width:70px;
-    height:200px;
+            background:rgba(5,10,20,.8);
 
-    transform-origin:bottom center;
+            border:3px solid #78ffb7;
 
-    animation:sway 2.5s ease-in-out infinite;
+            box-shadow:
 
-}
+                0 0 15px #78ffb7,
+                inset 0 0 20px rgba(120,255,183,.1);
 
-.flower:nth-child(2){
-    animation-delay:.3s;
-}
+            backdrop-filter:blur(5px);
 
-.flower:nth-child(3){
-    animation-delay:.8s;
-}
+        }
 
-.flower:nth-child(4){
-    animation-delay:.4s;
-}
 
-.flower:nth-child(5){
-    animation-delay:1s;
-}
+        .signal{
 
+            font-size:14px;
 
-@keyframes sway{
+            color:#78ffb7;
 
-    0%,100%{
-        transform:rotate(-3deg);
-    }
+            letter-spacing:4px;
 
-    50%{
-        transform:rotate(3deg);
-    }
+            margin-bottom:15px;
 
-}
+            animation:signalBlink 1s infinite;
 
+        }
 
-/* ============================= */
-/* CABEZA FLOR PIXEL              */
-/* ============================= */
+        @keyframes signalBlink{
 
-.flower-head{
+            50%{
+                opacity:.25;
+            }
 
-    position:absolute;
+        }
 
-    top:0;
-    left:18px;
 
-    width:36px;
-    height:36px;
+        .transmission h1{
 
-    background:#ffdf00;
+            font-size:clamp(28px,6vw,55px);
 
-    box-shadow:
+            margin-bottom:20px;
 
-        -18px 0 #ffdf00,
-        18px 0 #ffdf00,
+            text-shadow:
+                0 0 15px #9b6cff;
 
-        0 -18px #ffe94a,
-        0 18px #ffd000,
+        }
 
-        -13px -13px #ffe94a,
-        13px -13px #ffe94a,
 
-        -13px 13px #ffd000,
-        13px 13px #ffd000;
+        .transmission p{
 
-}
+            font-size:clamp(14px,3vw,18px);
 
+            line-height:1.7;
 
-/* centro */
+            color:#e0e0ff;
 
-.flower-head::after{
+            margin-bottom:25px;
 
-    content:"";
+        }
 
-    position:absolute;
 
-    width:18px;
-    height:18px;
+        /* ===========================
+           BOTONES
+        =========================== */
 
-    background:#8b5a2b;
+        .alien-button{
 
-    top:9px;
-    left:9px;
+            font-family:"Courier New", monospace;
 
-    box-shadow:
-        4px 4px #6b421f;
+            font-weight:bold;
 
-}
+            font-size:16px;
 
+            padding:15px 25px;
 
-/* ============================= */
-/* TALLO                          */
-/* ============================= */
+            cursor:pointer;
 
-.stem{
+            border:2px solid #78ffb7;
 
-    position:absolute;
+            background:#0b261d;
 
-    width:12px;
-    height:140px;
+            color:#78ffb7;
 
-    background:#35a853;
+            box-shadow:
+                0 0 10px rgba(120,255,183,.5);
 
-    left:30px;
-    top:45px;
+            transition:.2s;
 
-    box-shadow:
-        6px 0 #21883c;
+        }
 
-}
 
+        .alien-button:hover{
 
-/* hojas */
+            transform:translateY(-3px);
 
-.leaf{
+            background:#78ffb7;
 
-    position:absolute;
+            color:#05100c;
 
-    width:28px;
-    height:14px;
+            box-shadow:
+                0 0 25px #78ffb7;
 
-    background:#43b95f;
+        }
 
-}
 
-.leaf.left{
+        .alien-button:active{
 
-    left:7px;
-    top:110px;
+            transform:translateY(2px);
 
-    transform:rotate(30deg);
+        }
 
-}
 
-.leaf.right{
+        /* ===========================
+           UFO
+        =========================== */
 
-    right:7px;
-    top:140px;
+        .ufo{
 
-    transform:rotate(-30deg);
+            position:absolute;
 
-}
+            width:180px;
+            height:80px;
 
+            top:20%;
 
-/* ============================= */
-/* PISO                           */
-/* ============================= */
+            left:-250px;
 
-.ground{
+            z-index:5;
 
-    position:absolute;
+        }
 
-    bottom:0;
 
-    width:100%;
-    height:110px;
+        .ufo-top{
 
-    background:#6ac259;
+            position:absolute;
 
-    border-top:15px solid #48a447;
+            width:85px;
+            height:45px;
 
-}
+            left:48px;
 
-.ground::after{
+            top:0;
 
-    content:"";
+            background:#7ee7ff;
 
-    position:absolute;
+            border-radius:50px 50px 10px 10px;
 
-    top:15px;
+            box-shadow:
+                inset 0 0 20px #48a4ff,
+                0 0 20px #75ddff;
 
-    width:100%;
-    height:95px;
+        }
 
-    background:
 
-        repeating-linear-gradient(
-            45deg,
-            #9b6538,
-            #9b6538 20px,
-            #85532f 20px,
-            #85532f 40px
-        );
+        .ufo-body{
 
-}
+            position:absolute;
 
+            width:180px;
+            height:45px;
 
-/* ============================= */
-/* BOTÓN                          */
-/* ============================= */
+            top:30px;
 
-.game-button{
+            background:#a6a1b3;
 
-    position:absolute;
+            border-radius:50%;
 
-    left:50%;
-    bottom:35px;
+            box-shadow:
+                inset 0 -10px #65616f,
+                0 0 20px rgba(255,255,255,.3);
 
-    transform:translateX(-50%);
+        }
 
-    z-index:20;
 
-    font-family:"Courier New", monospace;
+        .ufo-light{
 
-    font-size:16px;
-    font-weight:bold;
+            position:absolute;
 
-    background:#ffd83d;
+            width:20px;
+            height:10px;
 
-    border:none;
+            bottom:8px;
 
-    padding:16px 25px;
+            border-radius:50%;
 
-    cursor:pointer;
+            background:#9aff77;
 
-    color:#5a4100;
+            box-shadow:
 
-    box-shadow:
+                40px 0 #ffec75,
+                80px 0 #ff75d8,
+                120px 0 #7affff,
+                0 0 12px #9aff77;
 
-        0 6px #b47d00,
-        6px 6px #704b00;
+            left:20px;
 
-    transition:.15s;
+        }
 
-}
 
-.game-button:hover{
+        .ufo.fly{
 
-    transform:
-        translateX(-50%)
-        translateY(-3px);
+            animation:ufoArrival 4s ease-in-out forwards;
 
-}
+        }
 
-.game-button:active{
 
-    transform:
-        translateX(-50%)
-        translateY(6px);
+        @keyframes ufoArrival{
 
-    box-shadow:
-        0 0 #b47d00;
+            0%{
+                left:-250px;
+                transform:rotate(-10deg);
+            }
 
-}
+            60%{
+                left:50%;
+                transform:
+                    translateX(-50%)
+                    rotate(5deg);
+            }
 
+            100%{
+                left:50%;
+                transform:
+                    translateX(-50%)
+                    translateY(40px);
+            }
 
-/* ============================= */
-/* CARTA                          */
-/* ============================= */
+        }
 
-.letter-container{
 
-    position:fixed;
+        /* ===========================
+           RAYO UFO
+        =========================== */
 
-    inset:0;
+        .beam{
 
-    background:rgba(0,0,0,.55);
+            position:absolute;
 
-    z-index:100;
+            width:180px;
+            height:0;
 
-    display:flex;
+            top:30%;
 
-    justify-content:center;
-    align-items:center;
+            left:50%;
 
-    opacity:0;
+            transform:translateX(-50%);
 
-    pointer-events:none;
+            background:
 
-    transition:.5s;
+                linear-gradient(
+                    rgba(147,255,199,.7),
+                    rgba(147,255,199,.05)
+                );
 
-}
+            clip-path:polygon(
+                40% 0,
+                60% 0,
+                100% 100%,
+                0 100%
+            );
 
-.letter-container.show{
+            opacity:0;
 
-    opacity:1;
+            z-index:3;
 
-    pointer-events:auto;
+        }
 
-}
 
+        .beam.show{
 
-.letter{
+            animation:beamDown 2s forwards;
 
-    width:min(88%,500px);
+        }
 
-    background:#fff8dc;
 
-    padding:35px;
+        @keyframes beamDown{
 
-    position:relative;
+            from{
+                height:0;
+                opacity:0;
+            }
 
-    border:8px solid #ffd83d;
+            to{
+                height:70vh;
+                opacity:1;
+            }
 
-    box-shadow:
-        12px 12px #684c31;
+        }
 
-    transform:scale(.4) translateY(200px);
 
-    transition:
-        transform .6s cubic-bezier(.17,.89,.32,1.4);
+        /* ===========================
+           NAVE INTERIOR
+        =========================== */
 
-}
+        #shipScene{
 
+            background:
 
-.letter-container.show .letter{
+                radial-gradient(
+                    circle,
+                    #281b43,
+                    #0d0a17 70%
+                );
 
-    transform:
-        scale(1)
-        translateY(0);
+        }
 
-}
 
+        .ship-panel{
 
-.letter h2{
+            width:min(92%,700px);
 
-    text-align:center;
+            padding:35px;
 
-    color:#d39b00;
+            text-align:center;
 
-    margin-bottom:20px;
+            border:3px solid #996cff;
 
-}
+            background:#090611;
 
+            box-shadow:
 
-.letter p{
+                0 0 30px rgba(155,108,255,.7),
+                inset 0 0 30px rgba(155,108,255,.1);
 
-    color:#4c4032;
+        }
 
-    font-family:Arial,sans-serif;
 
-    line-height:1.7;
+        /* ===========================
+           ALIEN
+        =========================== */
 
-    text-align:center;
+        .alien{
 
-    font-size:17px;
+            position:relative;
 
-}
+            width:120px;
+            height:140px;
 
+            margin:0 auto 25px;
 
-/* cerrar */
+            animation:alienFloat 2s ease-in-out infinite;
 
-.close{
+        }
 
-    position:absolute;
 
-    right:10px;
-    top:7px;
+        .alien-head{
 
-    background:none;
-    border:none;
+            position:absolute;
 
-    font-size:25px;
+            width:110px;
+            height:120px;
 
-    cursor:pointer;
+            background:#83ff9b;
 
-}
+            border-radius:
+                55% 55% 65% 65%;
 
+            left:5px;
 
-/* ============================= */
-/* CORAZONES / PARTÍCULAS         */
-/* ============================= */
+            box-shadow:
+                0 0 25px rgba(131,255,155,.5);
 
-.particle{
+        }
 
-    position:absolute;
 
-    font-size:25px;
+        .alien-eye{
 
-    pointer-events:none;
+            position:absolute;
 
-    animation:particleAnimation 2s forwards;
+            width:28px;
+            height:48px;
 
-}
+            background:#080812;
 
-@keyframes particleAnimation{
+            border-radius:50%;
 
-    0%{
+            top:32px;
 
-        transform:
-            translateY(0)
-            scale(.4);
+        }
 
-        opacity:1;
 
-    }
+        .alien-eye.left{
+            left:22px;
+            transform:rotate(10deg);
+        }
 
-    100%{
 
-        transform:
-            translateY(-250px)
-            rotate(30deg)
-            scale(1.5);
+        .alien-eye.right{
+            right:22px;
+            transform:rotate(-10deg);
+        }
 
-        opacity:0;
 
-    }
+        .alien-mouth{
 
-}
+            position:absolute;
 
+            width:25px;
+            height:4px;
 
-/* ============================= */
-/* RESPONSIVE                     */
-/* ============================= */
+            background:#395b3e;
 
-@media(max-width:600px){
+            left:43px;
+            top:92px;
 
-    .flowers{
+            border-radius:50%;
 
-        transform:scale(.75);
+        }
 
-        transform-origin:bottom center;
 
-        width:130%;
-        left:-15%;
+        @keyframes alienFloat{
 
-    }
+            50%{
+                transform:translateY(-10px);
+            }
 
-    .flower:nth-child(1),
-    .flower:nth-child(5){
+        }
 
-        display:none;
 
-    }
+        /* ===========================
+           ESCANEO
+        =========================== */
 
-}
+        .scanner{
 
-</style>
+            margin-top:20px;
+
+            min-height:150px;
+
+            text-align:left;
+
+            color:#78ffb7;
+
+            font-size:15px;
+
+            line-height:1.9;
+
+        }
+
+
+        .scan-line{
+
+            opacity:0;
+
+            transform:translateY(5px);
+
+            transition:.4s;
+
+        }
+
+
+        .scan-line.visible{
+
+            opacity:1;
+            transform:translateY(0);
+
+        }
+
+
+        /* ===========================
+           BARRA COMPATIBILIDAD
+        =========================== */
+
+        .progress-container{
+
+            margin-top:25px;
+
+            display:none;
+
+        }
+
+
+        .progress{
+
+            width:100%;
+            height:25px;
+
+            border:2px solid #78ffb7;
+
+            background:#07110d;
+
+            overflow:hidden;
+
+        }
+
+
+        .progress-bar{
+
+            width:0%;
+            height:100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #78ffb7,
+                    #80d9ff,
+                    #c17aff
+                );
+
+            transition:width .5s;
+
+        }
+
+
+        #progressText{
+
+            margin-top:10px;
+
+            color:#c9c3ff;
+
+        }
+
+
+        /* ===========================
+           MINIJUEGO
+        =========================== */
+
+        #gameScene{
+
+            background:
+                radial-gradient(
+                    circle,
+                    #16102a,
+                    #050510
+                );
+
+        }
+
+
+        .game-info{
+
+            position:absolute;
+
+            top:30px;
+
+            text-align:center;
+
+            z-index:20;
+
+        }
+
+
+        .heart{
+
+            position:absolute;
+
+            cursor:pointer;
+
+            font-size:45px;
+
+            user-select:none;
+
+            animation:heartFloat 1.5s ease-in-out infinite;
+
+            filter:
+                drop-shadow(
+                    0 0 10px #ff71cf
+                );
+
+        }
+
+
+        @keyframes heartFloat{
+
+            50%{
+                transform:
+                    translateY(-15px)
+                    scale(1.15);
+            }
+
+        }
+
+
+        /* ===========================
+           RESULTADO FINAL
+        =========================== */
+
+        #finalScene{
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    #39265f,
+                    #080710 75%
+                );
+
+        }
+
+
+        .final-card{
+
+            width:min(90%,600px);
+
+            padding:35px;
+
+            text-align:center;
+
+            background:rgba(7,5,14,.9);
+
+            border:3px solid #ff83dd;
+
+            box-shadow:
+                0 0 30px rgba(255,131,221,.45);
+
+        }
+
+
+        .final-card h1{
+
+            color:#ff8de3;
+
+            margin-bottom:25px;
+
+        }
+
+
+        .final-card p{
+
+            font-family:Arial, sans-serif;
+
+            line-height:1.8;
+
+            color:#eee8ff;
+
+            font-size:17px;
+
+        }
+
+
+        .final-alien{
+
+            font-size:65px;
+
+            margin-bottom:15px;
+
+            animation:alienFloat 2s infinite ease-in-out;
+
+        }
+
+
+        /* ===========================
+           MÚSICA
+        =========================== */
+
+        .music-button{
+
+            position:fixed;
+
+            top:15px;
+            right:15px;
+
+            z-index:999;
+
+            border:1px solid #78ffb7;
+
+            background:rgba(4,10,10,.8);
+
+            color:#78ffb7;
+
+            padding:10px 13px;
+
+            cursor:pointer;
+
+            font-family:"Courier New", monospace;
+
+            display:none;
+
+        }
+
+
+        /* ===========================
+           FLASH TRANSICIÓN
+        =========================== */
+
+        .flash{
+
+            position:fixed;
+
+            inset:0;
+
+            background:white;
+
+            opacity:0;
+
+            pointer-events:none;
+
+            z-index:1000;
+
+        }
+
+
+        .flash.active{
+
+            animation:flashAnimation 1.2s;
+
+        }
+
+
+        @keyframes flashAnimation{
+
+            0%{opacity:0;}
+            40%{opacity:1;}
+            100%{opacity:0;}
+
+        }
+
+
+        /* ===========================
+           RESPONSIVE
+        =========================== */
+
+        @media(max-width:600px){
+
+            .transmission{
+                padding:25px 18px;
+            }
+
+            .ship-panel{
+                padding:25px 18px;
+            }
+
+            .moon{
+                width:65px;
+                height:65px;
+            }
+
+            .ufo{
+                transform:scale(.8);
+            }
+
+            .scanner{
+                font-size:13px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -632,261 +950,871 @@ body{
 <body>
 
 
-<div class="scene">
+<!-- =============================
+     AUDIO
+============================= -->
 
-    <div class="sun"></div>
-
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-
-
-    <div class="title">
-
-        🌼 Para ti 🌼
-
-    </div>
+<audio id="music" loop preload="auto">
+    <source src="cancion.mp3" type="audio/mpeg">
+</audio>
 
 
+<button
+    class="music-button"
+    id="musicButton"
+    onclick="toggleMusic()"
+>
+    ♫ ON
+</button>
 
-    <div class="flowers">
 
-
-        <div class="flower">
-
-            <div class="flower-head"></div>
-
-            <div class="stem"></div>
-
-            <div class="leaf left"></div>
-
-            <div class="leaf right"></div>
-
-        </div>
+<div
+    class="flash"
+    id="flash"
+></div>
 
 
 
-        <div class="flower">
+<!-- =============================
+     ESCENA 1
+============================= -->
 
-            <div class="flower-head"></div>
+<section
+    class="scene active"
+    id="earthScene"
+>
 
-            <div class="stem"></div>
-
-            <div class="leaf left"></div>
-
-            <div class="leaf right"></div>
-
-        </div>
-
-
-
-        <div class="flower">
-
-            <div class="flower-head"></div>
-
-            <div class="stem"></div>
-
-            <div class="leaf left"></div>
-
-            <div class="leaf right"></div>
-
-        </div>
+    <div
+        class="stars"
+        id="stars"
+    ></div>
 
 
-
-        <div class="flower">
-
-            <div class="flower-head"></div>
-
-            <div class="stem"></div>
-
-            <div class="leaf left"></div>
-
-            <div class="leaf right"></div>
-
-        </div>
+    <div class="moon"></div>
 
 
-
-        <div class="flower">
-
-            <div class="flower-head"></div>
-
-            <div class="stem"></div>
-
-            <div class="leaf left"></div>
-
-            <div class="leaf right"></div>
-
-        </div>
-
-
-    </div>
-
-
-
-    <button
-        class="game-button"
-        onclick="openLetter()"
+    <div
+        class="ufo"
+        id="ufo"
     >
 
-        Presiona aquí 💛
+        <div class="ufo-top"></div>
 
-    </button>
+        <div class="ufo-body">
+
+            <div class="ufo-light"></div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="beam"
+        id="beam"
+    ></div>
 
 
     <div class="ground"></div>
 
-</div>
+
+    <div
+        class="transmission"
+        id="initialTransmission"
+    >
+
+        <div class="signal">
+
+            ● SIGNAL DETECTED
+
+        </div>
 
 
+        <h1>
 
-<!-- CARTA -->
+            INCOMING TRANSMISSION
 
-<div
-    class="letter-container"
-    id="letterContainer"
->
-
-    <div class="letter">
-
-
-        <button
-            class="close"
-            onclick="closeLetter()"
-        >
-
-            ×
-
-        </button>
-
-
-        <h2>
-            Para ti 🌻
-        </h2>
+        </h1>
 
 
         <p>
 
-            Quería darte algo diferente.
+            Hemos interceptado una señal
+            proveniente de algún punto de la Tierra.
 
             <br><br>
 
-            Tal vez no pueda entregarte todas las flores
-            amarillas del mundo, pero sí quería hacer algo
-            que fuera especialmente para ti.
+            Parece estar relacionada contigo.
 
             <br><br>
 
-            Gracias por compartir conmigo tantos momentos,
-            por las risas, las tonterías, las conversaciones
-            y hasta esos pequeños detalles que terminan
-            significando muchísimo.
-
-            <br><br>
-
-            Espero que cuando veas estas flores recuerdes
-            que alguien estuvo pensando en ti mientras
-            hacía todo esto.
-
-            <br><br>
-
-            💛🌻
+            ¿Deseas investigar?
 
         </p>
 
 
+        <button
+            class="alien-button"
+            onclick="startTransmission()"
+        >
+
+            ACEPTAR TRANSMISIÓN 👽
+
+        </button>
+
     </div>
 
-</div>
+</section>
+
+
+
+<!-- =============================
+     ESCENA 2
+============================= -->
+
+<section
+    class="scene"
+    id="shipScene"
+>
+
+    <div class="ship-panel">
+
+
+        <div class="alien">
+
+            <div class="alien-head">
+
+                <div
+                    class="alien-eye left"
+                ></div>
+
+                <div
+                    class="alien-eye right"
+                ></div>
+
+                <div
+                    class="alien-mouth"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <h2>
+
+            HUMANA LOCALIZADA
+
+        </h2>
+
+
+        <div
+            class="scanner"
+            id="scanner"
+        >
+
+            <div
+                class="scan-line"
+                id="scan1"
+            >
+
+                > Iniciando análisis...
+
+            </div>
+
+
+            <div
+                class="scan-line"
+                id="scan2"
+            >
+
+                > Nivel de belleza:
+                ERROR — límite excedido
+
+            </div>
+
+
+            <div
+                class="scan-line"
+                id="scan3"
+            >
+
+                > Nivel de ternura:
+                peligrosamente alto
+
+            </div>
+
+
+            <div
+                class="scan-line"
+                id="scan4"
+            >
+
+                > Detectando pensamientos de Adrián...
+
+            </div>
+
+
+            <div
+                class="scan-line"
+                id="scan5"
+            >
+
+                > Resultado:
+                piensa demasiado en ti 💚
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="progress-container"
+            id="progressContainer"
+        >
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar"
+                ></div>
+
+            </div>
+
+            <div id="progressText">
+
+                Compatibilidad: 0%
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =============================
+     ESCENA 3 - MINIJUEGO
+============================= -->
+
+<section
+    class="scene"
+    id="gameScene"
+>
+
+    <div class="game-info">
+
+        <h2>
+            PRUEBA FINAL
+        </h2>
+
+        <p>
+            Captura 5 corazones para completar el análisis.
+        </p>
+
+        <br>
+
+        <div id="heartCounter">
+
+            0 / 5
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="gameArea"
+        style="
+            position:absolute;
+            inset:0;
+        "
+    ></div>
+
+</section>
+
+
+
+<!-- =============================
+     ESCENA FINAL
+============================= -->
+
+<section
+    class="scene"
+    id="finalScene"
+>
+
+    <div class="final-card">
+
+        <div class="final-alien">
+
+            👽💜
+
+        </div>
+
+
+        <h1>
+
+            ANÁLISIS COMPLETADO
+
+        </h1>
+
+
+        <p>
+
+            Después de analizar millones de señales
+            provenientes de este planeta,
+            encontramos algo bastante extraño.
+
+            <br><br>
+
+            Hay alguien que piensa muchísimo en ti.
+
+            <br><br>
+
+            Sospechosamente demasiado.
+
+            <br><br>
+
+            Y parece que el responsable soy yo.
+
+            <br><br>
+
+            Gracias por todos los momentos,
+            las risas, las tonterías
+            y cada pequeño momento contigo.
+
+            <br><br>
+
+            Quizá sí me estoy convirtiendo en marciano...
+
+            <br><br>
+
+            <strong>
+
+                pero por ti. 👽💚
+
+            </strong>
+
+        </p>
+
+    </div>
+
+</section>
 
 
 
 <script>
 
 
-function openLetter(){
+/* =============================
+   ESTRELLAS
+============================= */
 
-    const container =
-        document.getElementById("letterContainer");
+const starsContainer =
+    document.getElementById("stars");
 
-    container.classList.add("show");
 
-    createParticles();
+for(let i = 0; i < 100; i++){
+
+    const star =
+        document.createElement("div");
+
+    star.className =
+        "star";
+
+    star.style.left =
+        Math.random() * 100 + "%";
+
+    star.style.top =
+        Math.random() * 100 + "%";
+
+    star.style.animationDelay =
+        Math.random() * 2 + "s";
+
+    star.style.animationDuration =
+        1 + Math.random() * 3 + "s";
+
+    starsContainer.appendChild(star);
 
 }
 
 
 
-function closeLetter(){
+/* =============================
+   AUDIO
+============================= */
 
-    const container =
-        document.getElementById("letterContainer");
+const music =
+    document.getElementById("music");
 
-    container.classList.remove("show");
+const musicButton =
+    document.getElementById("musicButton");
+
+let musicPlaying = false;
+
+
+function startMusic(){
+
+    music.volume = 0.45;
+
+    music.play()
+    .then(()=>{
+
+        musicPlaying = true;
+
+        musicButton.style.display =
+            "block";
+
+        musicButton.innerHTML =
+            "♫ ON";
+
+    })
+    .catch(error => {
+
+        console.log(
+            "El navegador bloqueó el audio:",
+            error
+        );
+
+    });
 
 }
 
 
+
+function toggleMusic(){
+
+    if(musicPlaying){
+
+        music.pause();
+
+        musicPlaying = false;
+
+        musicButton.innerHTML =
+            "♫ OFF";
+
+    }
+
+    else{
+
+        music.play();
+
+        musicPlaying = true;
+
+        musicButton.innerHTML =
+            "♫ ON";
+
+    }
+
+}
+
+
+
+/* =============================
+   TRANSMISIÓN
+============================= */
+
+function startTransmission(){
+
+    startMusic();
+
+
+    const initial =
+        document.getElementById(
+            "initialTransmission"
+        );
+
+
+    initial.style.opacity =
+        "0";
+
+    initial.style.pointerEvents =
+        "none";
+
+
+    setTimeout(()=>{
+
+        document
+            .getElementById("ufo")
+            .classList
+            .add("fly");
+
+    },500);
+
+
+    setTimeout(()=>{
+
+        document
+            .getElementById("beam")
+            .classList
+            .add("show");
+
+    },3500);
+
+
+    setTimeout(()=>{
+
+        flashTransition();
+
+    },5200);
+
+
+    setTimeout(()=>{
+
+        changeScene(
+            "earthScene",
+            "shipScene"
+        );
+
+        startScanning();
+
+    },5800);
+
+}
+
+
+
+/* =============================
+   CAMBIO ESCENA
+============================= */
+
+function changeScene(
+    oldScene,
+    newScene
+){
+
+    document
+        .getElementById(oldScene)
+        .classList
+        .remove("active");
+
+
+    document
+        .getElementById(newScene)
+        .classList
+        .add("active");
+
+}
+
+
+
+/* =============================
+   FLASH
+============================= */
+
+function flashTransition(){
+
+    const flash =
+        document.getElementById("flash");
+
+    flash.classList.add("active");
+
+
+    setTimeout(()=>{
+
+        flash.classList.remove("active");
+
+    },1200);
+
+}
+
+
+
+/* =============================
+   ESCÁNER
+============================= */
+
+function startScanning(){
+
+    const lines = [
+
+        "scan1",
+        "scan2",
+        "scan3",
+        "scan4",
+        "scan5"
+
+    ];
+
+
+    lines.forEach(
+        (id,index)=>{
+
+            setTimeout(()=>{
+
+                document
+                    .getElementById(id)
+                    .classList
+                    .add("visible");
+
+            },index * 1300);
+
+        }
+    );
+
+
+    setTimeout(()=>{
+
+        startCompatibility();
+
+    },7000);
+
+}
+
+
+
+/* =============================
+   COMPATIBILIDAD
+============================= */
+
+function startCompatibility(){
+
+    const container =
+        document.getElementById(
+            "progressContainer"
+        );
+
+    const bar =
+        document.getElementById(
+            "progressBar"
+        );
+
+    const text =
+        document.getElementById(
+            "progressText"
+        );
+
+
+    container.style.display =
+        "block";
+
+
+    let percent = 0;
+
+
+    const interval =
+        setInterval(()=>{
+
+            percent++;
+
+            bar.style.width =
+                percent + "%";
+
+            text.innerHTML =
+                "Compatibilidad: "
+                + percent
+                + "%";
+
+
+            if(percent >= 100){
+
+                clearInterval(interval);
+
+
+                text.innerHTML =
+                    "Compatibilidad: 100% 💜";
+
+
+                setTimeout(()=>{
+
+                    changeScene(
+                        "shipScene",
+                        "gameScene"
+                    );
+
+                    createHeart();
+
+                },1500);
+
+            }
+
+        },35);
+
+}
+
+
+
+/* =============================
+   MINIJUEGO
+============================= */
+
+let captured = 0;
+
+
+function createHeart(){
+
+    if(captured >= 5){
+
+        finishGame();
+
+        return;
+
+    }
+
+
+    const area =
+        document.getElementById(
+            "gameArea"
+        );
+
+
+    const heart =
+        document.createElement("div");
+
+
+    heart.className =
+        "heart";
+
+
+    const symbols = [
+
+        "💜",
+        "💚",
+        "💖",
+        "💛",
+        "🩷"
+
+    ];
+
+
+    heart.innerHTML =
+        symbols[
+            Math.floor(
+                Math.random()
+                *
+                symbols.length
+            )
+        ];
+
+
+    heart.style.left =
+        10
+        +
+        Math.random() * 75
+        +
+        "%";
+
+
+    heart.style.top =
+        25
+        +
+        Math.random() * 60
+        +
+        "%";
+
+
+    heart.onclick =
+        function(){
+
+            captured++;
+
+
+            document
+                .getElementById(
+                    "heartCounter"
+                )
+                .innerHTML =
+                    captured
+                    +
+                    " / 5";
+
+
+            heart.remove();
+
+
+            createParticles();
+
+
+            setTimeout(()=>{
+
+                createHeart();
+
+            },400);
+
+        };
+
+
+    area.appendChild(heart);
+
+}
+
+
+
+/* =============================
+   PARTÍCULAS
+============================= */
 
 function createParticles(){
 
-    const symbols =
-        ["💛","🌼","✨","🌻"];
-
-
-    for(let i = 0; i < 30; i++){
+    for(let i = 0; i < 12; i++){
 
         const particle =
             document.createElement("div");
 
-        particle.className =
-            "particle";
-
 
         particle.innerHTML =
-            symbols[
-                Math.floor(
-                    Math.random()
-                    *
-                    symbols.length
-                )
-            ];
+            "✨";
+
+
+        particle.style.position =
+            "absolute";
 
 
         particle.style.left =
-            Math.random()
-            *
-            window.innerWidth
-            + "px";
+            Math.random() * 100 + "%";
 
 
         particle.style.top =
-            (
-                window.innerHeight
-                -
-                Math.random()*150
-            )
-            + "px";
+            Math.random() * 100 + "%";
 
 
-        particle.style.animationDelay =
-            Math.random()
-            *
-            .5
-            + "s";
+        particle.style.fontSize =
+            15 + Math.random()*20 + "px";
 
 
-        document.body.appendChild(
-            particle
-        );
+        particle.style.pointerEvents =
+            "none";
 
 
-        setTimeout(
-            ()=>particle.remove(),
-            2600
-        );
+        document
+            .getElementById("gameArea")
+            .appendChild(particle);
+
+
+        setTimeout(()=>{
+
+            particle.remove();
+
+        },800);
 
     }
+
+}
+
+
+
+/* =============================
+   FINAL
+============================= */
+
+function finishGame(){
+
+    flashTransition();
+
+
+    setTimeout(()=>{
+
+        changeScene(
+            "gameScene",
+            "finalScene"
+        );
+
+    },600);
 
 }
 
